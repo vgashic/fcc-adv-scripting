@@ -13,7 +13,7 @@ function symDiff(arr1, arr2) {
 	// Get all element from arr1 which don't exists in arr2
 	for (var i = 0; i < arr1.length; i++) {
 
-		if (arr2.indexOf(arr1[i]) == -1) {
+		if (arr2.indexOf(arr1[i]) < 0 && res.indexOf(arr1[i]) < 0) {
 			res.push(arr1[i]);
 		}
 	}
@@ -21,7 +21,7 @@ function symDiff(arr1, arr2) {
 	// And vice versa
 	for (var j = 0; j < arr2.length; j++) {
 
-		if (arr1.indexOf(arr2[j]) == -1) {
+		if (arr1.indexOf(arr2[j]) < 0 && res.indexOf(arr2[j]) < 0) {
 			res.push(arr2[j]);
 		}
 	}
@@ -44,4 +44,4 @@ function sym() {
 	return res;
 }
 
-console.log(sym([1, 2, 5], [2, 3, 5], [3, 4, 5]));
+console.log(sym([1, 1, 2, 5], [2, 2, 3, 5], [3, 4, 5, 5]));
