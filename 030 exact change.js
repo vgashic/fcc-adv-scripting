@@ -9,21 +9,27 @@ Otherwise, return change in coin and bills, sorted in highest to lowest order.
 */
 
 var coinVal = {
-	PENNY: 0.01,
-	NICKEL: 0.05,
-	DIME: 0.10,
-	FIVE: 5.00,
-	ONE: 1.00,
-	TEN: 10.00,
-	QUARTER: 0.25,
-	TWENTY: 20.00,
-	"ONE HUNDRED": 100.00,
+	PENNY: 1,
+	NICKEL: 5,
+	DIME: 10,
+	QUARTER: 25,
+	FIVE: 500,
+	ONE: 100,
+	TEN: 1000,
+	TWENTY: 2000,
+	"ONE HUNDRED": 10000,
 };
 
 function checkCashRegister(price, cash, cid) {
 	"use strict";
 
 	var change = [];
+
+	var cid100 = cid.map(function (x) {
+		return [x[0], Math.round(x[1] * 100)];
+	});
+
+	//console.log(cid100);
 
 	// Because of some rounding errors (e.g. 2.05 is like 2.04999999)
 	var cashInRegister = cid.map(function (x) {
@@ -36,13 +42,13 @@ function checkCashRegister(price, cash, cid) {
 	}, 0);
 
 	// debug
-	// console.log(cashInRegister);
-	// console.log(totalCashInRegister);
+	//  console.log(cashInRegister);
+	//  console.log(totalCashInRegister);
 
-	var changeAmount = cash - price;
+	var changeAmount = Math.round(cash * 100) - Math.round(price * 100);
 
 	// debug
-	// console.log(changeAmount);
+	console.log(changeAmount);
 	// console.log(cid);
 
 	if (changeAmount > totalCashInRegister) {
@@ -54,15 +60,16 @@ function checkCashRegister(price, cash, cid) {
 		// console.log(changeRemains > 0);
 
 		while (changeRemains > 0) {
-			for (var i = cid.length - 1; i >= 0; i--) {
+			for (var i = cid100.length - 1; i >= 0; i--) {
 				//console.log(coinVal[cid[i][0]]);
-				if (changeRemains >= coinVal[cid[i][0]]) {
-					changeRemains -= coinVal[cid[i][0]];
+				if (changeRemains >= coinVal[cid100[i][0]] && cid100[i][1] > 0) {
+					changeRemains -= coinVal[cid100[i][0]];
 
-					cid[i][1] -= coinVal[cid[i][0]];
+					cid100[i][1] -= coinVal[cid100[i][0]];
 
-					change.push([cid[i][0], 1]);
-					console.log(changeRemains);
+					change.push([cid100[i][0], 1]);
+
+					//console.log(changeRemains);
 					break;
 				} else {
 					continue;
